@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PlayZen</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      background: #ffffff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+    
+    .loader-ring {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(0, 0, 0, 0.1);
+      border-radius: 50%;
+      border-top: 3px solid #000000;
+      animation: spin 1.2s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="loader-ring"></div>
+
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script>
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyBrtUhU9q00LzRh7w8EefmjnS285q4z1SE",
+      authDomain: "zoxagames-18911.firebaseapp.com",
+      databaseURL: "https://zoxagames-18911-default-rtdb.firebaseio.com",
+      projectId: "zoxagames-18911",
+      storageBucket: "zoxagames-18911.appspot.com",
+      messagingSenderId: "103847859434",
+      appId: "1:103847859434:web:7199efd6854969005fb393"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    
+    // Check authentication status
+    function checkAuthStatus() {
+      firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+          // User is signed in, check if email is verified
+          user.reload().then(() => {
+            if (user.emailVerified) {
+              // Redirect to home folder
+              setTimeout(() => {
+                window.location.href = "home/";
+              }, 1000);
+            } else {
+              // Redirect to login folder
+              setTimeout(() => {
+                window.location.href = "login/";
+              }, 1000);
+            }
+          }).catch(() => {
+            // On error, redirect to login
+            setTimeout(() => {
+              window.location.href = "login/";
+            }, 1000);
+          });
+        } else {
+          // User is not signed in, redirect to login
+          setTimeout(() => {
+            window.location.href = "login/";
+          }, 1000);
+        }
+      });
+    }
+
+    // Start the authentication check when page loads
+    document.addEventListener('DOMContentLoaded', checkAuthStatus);
+  </script>
+</body>
+</html>
